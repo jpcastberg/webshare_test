@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webshare Test</title>
+</head>
+<body style="display: flex; align-items: center; justify-content: center; background-color: rgb(61, 61, 61);">
+    <button id="share-button" style="height: 100px; width: 200px;">
+        Share
+    </button>
+
+    <script>
+        var shareButton = document.getElementById("share-button")
+        var queryParams = location.search.replace("?", "")
+            .split("&").reduce((acc, currentParam) => {
+                var splitParam = currentParam.split("=");
+                acc[splitParam[0]] = splitParam[1];
+                return acc;
+            }, {});
+        var timeout = Number(queryParams.timeout);
+        shareButton.addEventListener("click", function () {
+            if (!timeout) {
+                share();
+            } else {
+                setTimeout(() => share(), timeout);
+            }
+        });
+
+        function share() {
+            navigator.share({
+                title: "test share title",
+                text: "test share text"
+            }).then(
+                () => alert("share was successful"),
+                error => alert("there was an error: " + error)
+            );
+        }
+    </script>
+</body>
+</html>
